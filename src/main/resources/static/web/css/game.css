@@ -1,0 +1,32 @@
+.ship-piece{
+    background-color: mediumpurple;
+    /*background-color: #61CD20;*/
+
+}
+
+.ship-piece-hited{
+    background-color: darkmagenta;
+     /*background-color: #61CD20;*/
+}
+
+.salvo{
+    background-color: crimson;
+}
+
+/*Mio*/
+td, th{
+padding: 20px;
+height: 10%;}
+
+/*
+body{
+background-image: url("https://images.alphacoders.com/869/869314.jpg");
+}
+
+table{
+background-color:white;
+}
+*/
+
+/*td{
+background-color: #000080;}*/
