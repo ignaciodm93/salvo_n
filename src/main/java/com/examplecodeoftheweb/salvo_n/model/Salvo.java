@@ -53,9 +53,9 @@ public class Salvo {
         return id;
     }
 
-    public int getTurn() {
-        return turn;
-    }
+    //public int getTurn() {
+        //return turn;
+    //}
 
     public List<String> getLocations() {
         return locations;
