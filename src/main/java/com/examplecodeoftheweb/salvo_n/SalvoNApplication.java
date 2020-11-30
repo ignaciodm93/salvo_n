@@ -1,14 +1,8 @@
 package com.examplecodeoftheweb.salvo_n;
 
 
-import com.examplecodeoftheweb.salvo_n.model.Game;
-import com.examplecodeoftheweb.salvo_n.model.GamePlayer;
-import com.examplecodeoftheweb.salvo_n.model.Player;
-import com.examplecodeoftheweb.salvo_n.model.Ship;
-import com.examplecodeoftheweb.salvo_n.repository.GamePlayerRepository;
-import com.examplecodeoftheweb.salvo_n.repository.GameRepository;
-import com.examplecodeoftheweb.salvo_n.repository.PlayerRepository;
-import com.examplecodeoftheweb.salvo_n.repository.ShipRepository;
+import com.examplecodeoftheweb.salvo_n.model.*;
+import com.examplecodeoftheweb.salvo_n.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -33,7 +27,7 @@ public class SalvoNApplication {
 
 
 	@Bean
-	public CommandLineRunner initData(PlayerRepository repository, GameRepository Grepository, GamePlayerRepository GPrepository, ShipRepository shipRepository) {
+	public CommandLineRunner initData(PlayerRepository repository, GameRepository Grepository, GamePlayerRepository GPrepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
 		return (args) -> {
 
 
@@ -100,11 +94,16 @@ public class SalvoNApplication {
 			shipRepository.save(ship10);
 
 
-
-
-
-
-
+			//Salvoes
+			//prueba, creo que no se deberia hacer asi
+			Salvo salvo_1 = new Salvo(1, List.of("A3","B3","C3"), gamePlayer1);
+			Salvo salvo_2 = new Salvo(1, List.of("F1","D7","B9"), gamePlayer2);
+			Salvo salvo_3 = new Salvo(1, List.of("B5", "B6", "B7"), gamePlayer3);
+			Salvo salvo_4 = new Salvo(1, List.of("A5", "B9", "E3"), gamePlayer4);
+			salvoRepository.save(salvo_1);
+			salvoRepository.save(salvo_2);
+			salvoRepository.save(salvo_3);
+			salvoRepository.save(salvo_4);
 
 		};
 	}
