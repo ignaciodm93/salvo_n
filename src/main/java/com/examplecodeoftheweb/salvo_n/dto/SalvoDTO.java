@@ -13,14 +13,18 @@ public class SalvoDTO {
     }
     //ver si tengo que instanciarlo en el controlador para citarlo en el dto como this.ship
 
-    /*
-    public Map<String, Object> makeShipDTO(Salvo salvo){
+    //prueba
+    public Map<String, Object> makeSalvoDTO(Salvo salvo){
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("", );
+        dto.put("turn", salvo.getTurn());
+
+        //Guarda aca que si le tiro gamePlayer me tira error de loop
+        dto.put("player", salvo.getGamePlayer().getPlayer().getId());
+        dto.put("locations", salvo.getLocations());
 
 
         return dto;
-    }*/
+    }
 
 
 }

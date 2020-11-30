@@ -1,32 +1,46 @@
 .ship-piece{
-    background-color: mediumpurple;
-    /*background-color: #61CD20;*/
+    /*background-color: mediumpurple;*/
+    background-color: #7E7E7E;
 
 }
 
 .ship-piece-hited{
-    background-color: darkmagenta;
-     /*background-color: #61CD20;*/
+    /*background-color:  darkmagenta*/
+background: rgb(237,251,63);
+background: radial-gradient(circle, rgba(237,251,63,1) 22%, rgba(233,0,0,1) 100%);
+    border-radius: 40%;
 }
 
 .salvo{
+
+}
+
+.salvo-piece{
     background-color: crimson;
 }
 
-/*Mio*/
-td, th{
-padding: 20px;
-height: 10%;}
-
-/*
 body{
-background-image: url("https://images.alphacoders.com/869/869314.jpg");
+background-image: url("https://i.pinimg.com/originals/28/4b/43/284b43968d9f4482444ebba20f96b5ef.jpg");
+font-family: "Perpetua";
 }
 
 table{
-background-color:white;
-}
-*/
+font-size: 20px;
+background-color: #4B6AC4; /*#72B1F5*/
 
-/*td{
-background-color: #000080;}*/
+/*border: solid 7px #BF2C30;*/
+border: solid 7px #155E11;
+text-align: center;
+}
+
+td, th{
+padding: 10px;
+height: 10%;
+width: 10%}
+
+table:hover{
+transition: all ease 800ms;
+background-color: ;
+//border: solid 7px #7ABDE1;
+
+}

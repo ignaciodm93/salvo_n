@@ -59,18 +59,10 @@ public class GamePlayer {
 
 
 
-
-
-
-
     public void addShips(Ship newShip){
         this.ships.add(newShip);
         newShip.setGamePlayer(this);
     }
-
-
-
-
 
 
 
@@ -122,10 +114,12 @@ public class GamePlayer {
     public Set<Ship> getShips() {
         return ships;
     }
+
+    public Set<Salvo> getSalvos() {
+        return salvos;
+    }
+
     //endregion
-
-//CREO QUE faltan 2 metodos get
-
 
 
 

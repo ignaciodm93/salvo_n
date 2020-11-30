@@ -57,6 +57,8 @@ public class Salvo {
         return turn;
     }
 
+
+
     public List<String> getLocations() {
         return locations;
     }
