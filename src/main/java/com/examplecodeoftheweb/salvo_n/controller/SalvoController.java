@@ -96,6 +96,16 @@ public class SalvoController {
 
 
 
+    //Prueba
+    @RequestMapping("/leaderboard")
+    public List<Map<String, Object>> getLeaderboardScores(){
+        PlayerDTO playerDTO = new PlayerDTO();
+        return playerRepository.findAll().stream().map(player -> playerDTO.makePlayerScoreDTO(player)).collect(Collectors.toList());
+    }
+
+
+
+
 
 
 //region Metodos de prueba comentados

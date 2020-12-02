@@ -3,6 +3,7 @@ package com.examplecodeoftheweb.salvo_n.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +25,11 @@ public class Player {
     //nombre de la variable que vengo a buscar
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     private Set<GamePlayer> gamePlayers;    //nombre del set de base de datos
+
+
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    private Set<Score> scores;
+
 
 
 
@@ -52,6 +58,7 @@ public class Player {
     public Player(String name, String email) {
         this.email = email;
         this.name = name;
+        this.scores = new HashSet<Score>();
     }
 
     //region Getters & Setters
@@ -83,5 +90,53 @@ public class Player {
     public void setGamePlayers(Set<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
     }
+
+    public Set<Score> getScores() {
+        return scores;
+    }
+
+
+    //region para el DTO
+
+    public double getTotalScore(){
+
+        return this.getScores().stream().mapToDouble(Score -> Score.getScore()).sum();
+
+    }
+
+
+
+
+
+    public double getWinScore(){
+        return this.getScores().stream().filter(score -> score.getScore() == 1.0D).count();
+    }
+
+
+    public double getTiedScore(){
+        return this.getScores().stream().filter(score -> score.getScore() == 0.5D).count();
+    }
+
+
+    public double getLostScore(){
+        return this.getScores().stream().filter(score -> score.getScore() == 0.0D).count();
+    }
     //endregion
+
+    //endregion
+
+
+    //region Metodos adicionales
+    public void addScore(Score newScore){
+        this.scores.add(newScore);
+    }
+
+    //a chequear si se puede mejorar
+    public Score getGameScore(Game game){
+        return game.getScores().stream().filter(score -> score.getGame().getId() == game.getId()).findFirst().orElse(null);
+
+    }
+    //endregion
+
+
 }

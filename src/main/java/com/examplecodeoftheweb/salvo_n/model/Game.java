@@ -23,6 +23,10 @@ public class Game {
     Set<GamePlayer> gamePlayers;
 
 
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+    Set<Score> scores;  //ver si set o list
+
+
 
     /*
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
@@ -48,12 +52,15 @@ public class Game {
         gamePlayers = new HashSet<GamePlayer>();
     }
 
+    public Game(LocalDateTime created, Set<GamePlayer> gamePlayers, Set<Score> scores) {
+        this.created = created;
+        this.gamePlayers = gamePlayers;
+        this.scores = scores;
+    }
+
     //prueba
     public Game(){
-
         created = LocalDateTime.now();
-
-
     }
     //endregion
 
@@ -87,8 +94,7 @@ public class Game {
     }
 
 
-
-
-
-
+    public Set<Score> getScores() {
+        return scores;
+    }
 }

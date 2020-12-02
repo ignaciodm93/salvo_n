@@ -2,6 +2,7 @@
     /*background-color: mediumpurple;*/
     background-color: #7E7E7E;
 
+
 }
 
 .ship-piece-hited{
@@ -11,6 +12,19 @@ background: radial-gradient(circle, rgba(237,251,63,1) 22%, rgba(233,0,0,1) 100%
     border-radius: 40%;
 }
 
+.ship-piece-hited{
+    /*background-color:  darkmagenta*/
+background: rgb(237,251,63);
+background: radial-gradient(circle, rgba(237,251,63,1) 22%, rgba(233,0,0,1) 100%);
+    border-radius: 40%;
+
+}
+
+
+
+
+
+
 .salvo{
 
 }
@@ -18,6 +32,13 @@ background: radial-gradient(circle, rgba(237,251,63,1) 22%, rgba(233,0,0,1) 100%
 .salvo-piece{
     background-color: crimson;
 }
+
+.salvo-piece:hover{
+    background-color: crimson;
+    color: #ffffff;
+}
+
+
 
 body{
 background-image: url("https://i.pinimg.com/originals/28/4b/43/284b43968d9f4482444ebba20f96b5ef.jpg");
@@ -27,10 +48,9 @@ font-family: "Perpetua";
 table{
 font-size: 20px;
 background-color: #4B6AC4; /*#72B1F5*/
-
-/*border: solid 7px #BF2C30;*/
-border: solid 7px #155E11;
+border: solid 5px #155E11;
 text-align: center;
+
 }
 
 td, th{
@@ -40,7 +60,13 @@ width: 10%}
 
 table:hover{
 transition: all ease 800ms;
-background-color: ;
-//border: solid 7px #7ABDE1;
 
 }
+
+td:hover{
+transition: all ease 900ms;
+background-color: #0E0300;
+opacity: 0.4;
+
+}
+

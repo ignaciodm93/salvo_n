@@ -26,7 +26,19 @@ public class GameDTO {
                 .map(gamePlayer -> gamePlayerDto.makeGamePlayerDTO(gamePlayer))
                 .collect(Collectors.toList())
         );
+
+        //nuevo adding 1/12/20 MAL
+        /*
+        PlayerDTO playerDTO = new PlayerDTO();
+        dto.put("scores", game.getGamePlayers().stream().map(gp -> gp.getPlayer()).map(player -> playerDTO.makeGameScoreDTO(player)).collect(Collectors.toList()));
         return dto;
+        */
+
+        dto.put("scores", game.getScores().stream().map(s -> ScoreDTO.makeScoreDTO(s)).collect(Collectors.toList()));
+        return dto;
+
+
+
     }
 
 
