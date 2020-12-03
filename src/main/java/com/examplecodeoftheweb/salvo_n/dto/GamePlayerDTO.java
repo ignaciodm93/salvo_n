@@ -2,6 +2,7 @@ package com.examplecodeoftheweb.salvo_n.dto;
 
 
 import com.examplecodeoftheweb.salvo_n.model.GamePlayer;
+import com.examplecodeoftheweb.salvo_n.model.Salvo;
 import com.examplecodeoftheweb.salvo_n.model.Ship;
 
 import java.util.LinkedHashMap;
@@ -56,6 +57,40 @@ public class GamePlayerDTO {
 
         GameDTO gameDTO = new GameDTO();
         ShipDTO shipDTO = new ShipDTO();
+        SalvoDTO salvoDTO = new SalvoDTO();
+
+        //Uso el GAME DTO tomando al gp pasado por parametro como base
+        Map<String, Object> dto = gameDTO.makeGameDTO(gp.getGame());    //aca estoy citando el makeGameDTO que usa el de score
+
+        //C2. Consigo las naves del game player (las que le pertenecen)
+        //List<Ship> ships = gp.getShips().stream().collect(Collectors.toList());
+
+        //Repocco las ships obtenidas y almacenadas en la lista "ships" y le aplico a cada una el dtoShips
+        //Version 1, con este si necesito el punto C2.
+        //dto.put("ships", ships.stream().map(ship -> shipDTO.makeShipDTO(ship)).collect(Collectors.toList()));
+
+        //Version 2, con esto no necesito el punto C2.
+        dto.put("ships", gp.getShips().stream().map(ship -> shipDTO.makeShipDTO(ship)).collect(Collectors.toList()));
+
+        //Prueba
+        //dto.put("salvoes", gp.getGame().getGamePlayers().stream().map(gamePlayer -> gamePlayer.getSalvos().stream().map(s -> salvoDTO.makeSalvoDTO(s)).collect(Collectors.toList())).collect(Collectors.toList()));
+
+        dto.put("salvoes", gp.getGame().getGamePlayers().stream().flatMap(gamePlayer -> gamePlayer.getSalvos().stream()
+                .map(salvo -> salvoDTO.makeSalvoDTO(salvo)))
+                .collect(Collectors.toList()));
+
+        return dto;
+    }
+
+
+
+
+    //Original
+    /*
+    *  public Map<String, Object> makeGameViewDTO(GamePlayer gp){
+
+        GameDTO gameDTO = new GameDTO();
+        ShipDTO shipDTO = new ShipDTO();
 
         //Uso el GAME DTO tomando al gp pasado por parametro como base
         Map<String, Object> dto = gameDTO.makeGameDTO(gp.getGame());
@@ -72,8 +107,7 @@ public class GamePlayerDTO {
 
         return dto;
     }
-
-
+    * */
 
 
 

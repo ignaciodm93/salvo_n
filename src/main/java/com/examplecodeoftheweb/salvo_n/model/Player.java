@@ -3,6 +3,7 @@ package com.examplecodeoftheweb.salvo_n.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -15,15 +16,28 @@ public class Player {
     private long id;
     private String name;
     private String email;
+    private String password;
 
+    public String getPassword() {
+        return password;
+    }
 
-    //Si lo cambio, crashea. Chequear el game.
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+//Si lo cambio, crashea. Chequear el game.
    // @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     //Set<GamePlayer> gamePlayersSet;
 
     //nombre de la variable que vengo a buscar
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     private Set<GamePlayer> gamePlayers;    //nombre del set de base de datos
+
+
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    private Set<Score> scores;
+
 
 
 
@@ -49,9 +63,16 @@ public class Player {
         //NECESARIO POR SPRING
     public Player() { }
 
-    public Player(String name, String email) {
+    public Player(String email, String password){
+        this.email = email;
+        this.password = password;
+    }
+
+    public Player(String name, String email, String password) {
         this.email = email;
         this.name = name;
+        this.password = password;
+        this.scores = new HashSet<Score>();
     }
 
     //region Getters & Setters
@@ -83,5 +104,53 @@ public class Player {
     public void setGamePlayers(Set<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
     }
+
+    public Set<Score> getScores() {
+        return scores;
+    }
+
+
+    //region para el DTO
+
+    public double getTotalScore(){
+
+        return this.getScores().stream().mapToDouble(Score -> Score.getScore()).sum();
+
+    }
+
+
+
+
+
+    public double getWinScore(){
+        return this.getScores().stream().filter(score -> score.getScore() == 1.0D).count();
+    }
+
+
+    public double getTiedScore(){
+        return this.getScores().stream().filter(score -> score.getScore() == 0.5D).count();
+    }
+
+
+    public double getLostScore(){
+        return this.getScores().stream().filter(score -> score.getScore() == 0.0D).count();
+    }
     //endregion
+
+    //endregion
+
+
+    //region Metodos adicionales
+    public void addScore(Score newScore){
+        this.scores.add(newScore);
+    }
+
+    //a chequear si se puede mejorar
+    public Score getGameScore(Game game){
+        return game.getScores().stream().filter(score -> score.getGame().getId() == game.getId()).findFirst().orElse(null);
+
+    }
+    //endregion
+
+
 }

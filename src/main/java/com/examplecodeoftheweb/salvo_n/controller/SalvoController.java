@@ -14,9 +14,14 @@ import com.examplecodeoftheweb.salvo_n.repository.GameRepository;
 import com.examplecodeoftheweb.salvo_n.repository.PlayerRepository;
 import com.examplecodeoftheweb.salvo_n.repository.ShipRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -78,6 +83,38 @@ public class SalvoController {
 
 
     @RequestMapping("/games")
+    public Map<String, Object> getGameAll(Authentication authentication) {
+        Map<String,  Object>  dto = new LinkedHashMap<>();
+
+        if(isGuest(authentication)){
+            dto.put("player", "Guest");
+        }else{
+            Player player  = playerRepository.findByEmail(authentication.getName());
+            PlayerDTO   playerDTO   =   new PlayerDTO(player);
+            dto.put("player", playerDTO.makePlayerDTO(player));
+        }
+
+        dto.put("games", gameRepository.findAll()
+                .stream()
+                .map(game -> {
+                    GameDTO gameDTO =   new GameDTO(game);
+                    return  gameDTO.makeGameDTO(game);
+                })
+                .collect(Collectors.toList()));
+
+        return dto;
+
+    }
+
+    //Encontrar los datos del juego (jugadores), por el id del jugador pero solo las naves del que ingresamos el id.
+    @RequestMapping("/game_view/{id}")
+    public Map<String, Object> getGameView(@PathVariable Long id){
+        GamePlayerDTO gamePlayerDTO = new GamePlayerDTO();
+        return gamePlayerDTO.makeGameViewDTO(gamePlayerRepository.getOne(id));
+    }
+
+/* games original
+    @RequestMapping("/games")
     public List<Map<String, Object>> getGameAll(){
         GameDTO gameDto = new GameDTO();
         return gameRepository.findAll()
@@ -85,6 +122,9 @@ public class SalvoController {
                 .map(game -> gameDto.makeGameDTO(game))
                 .collect(Collectors.toList());
     }
+*7
+
+
 
 
     //Encontrar los datos del juego (jugadores), por el id del jugador pero solo las naves del que ingresamos el id.
@@ -93,6 +133,19 @@ public class SalvoController {
         GamePlayerDTO gamePlayerDTO = new GamePlayerDTO();
         return gamePlayerDTO.makeGameViewDTO(gamePlayerRepository.getOne(id));
     }
+
+
+
+    //Prueba
+    @RequestMapping("/leaderboard")
+    public List<Map<String, Object>> getLeaderboardScores(){
+        PlayerDTO playerDTO = new PlayerDTO();
+        return playerRepository.findAll().stream().map(player -> playerDTO.makePlayerScoreDTO(player)).collect(Collectors.toList());
+    }
+
+
+
+
 
 
 
@@ -234,6 +287,8 @@ private Map<String, Object> makePlayerDTO(Player player){
 
 
 */
+
+
 //endregion
 
     //region Metodos mios de prueba:
@@ -308,7 +363,14 @@ private Map<String, Object> makePlayerDTO(Player player){
     //endregion
 
 
-
+    @RequestMapping("/leaderBoard")
+    public List<Map<String,Object>> getLeaderBoard(){
+        PlayerDTO playerDTO = new PlayerDTO();
+        return playerRepository .findAll()
+                .stream()
+                .map(s -> playerDTO.makePlayerScoreDTO(s))
+                .collect(Collectors.toList());
+    }
 
 
 
@@ -325,6 +387,75 @@ private Map<String, Object> makePlayerDTO(Player player){
 
     }
 
+
+
+/*
+    @RequestMapping(path = "/persons", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(
+            @RequestParam first, @RequestParam last,
+            @RequestParam String email, @RequestParam String password) {
+
+        if (firstName.isEmpty() || last.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+
+        if (personRepository.findOneByEmail(email) !=  null) {
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        }
+
+        Punycode passwordEncoder;
+        playerRepository.save(new Person(first, last, email, passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+*/
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+/* primer intento SING IN
+
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> register(
+            @RequestParam String userName,
+            @RequestParam String email,
+            @RequestParam String password) {
+
+        if (userName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+
+        if (playerRepository.findByEmail(email) != null) {
+            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+        }
+
+
+        playerRepository.save(new Player(userName, email, passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
+
+*/
+
+
+    private boolean isGuest(Authentication authentication) {
+        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
+    }
+
+
+
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Object>register(
+            @RequestParam String email,
+            @RequestParam String password){
+        if(email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if (playerRepository.findByEmail(email) != null) {
+            return  new ResponseEntity<>("Name already in use",HttpStatus.FORBIDDEN);
+        }
+        playerRepository.save(new Player(email,passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
 
 

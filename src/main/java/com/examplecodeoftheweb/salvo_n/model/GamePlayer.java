@@ -58,22 +58,21 @@ public class GamePlayer {
     private Set<Salvo> salvos  = new HashSet<Salvo>();
 
 
-
-
-
-
-
+    //region Mathods
     public void addShips(Ship newShip){
         this.ships.add(newShip);
         newShip.setGamePlayer(this);
     }
 
+    //Prueba
+    public void addSalvo(Salvo newSalvo){
+        this.salvos.add(newSalvo);
+        newSalvo.setGamePlayer(this);
+    }
 
 
 
-
-
-
+    //endregion
 
     //region Constructores
     public GamePlayer(Game game, Player player) {
@@ -122,10 +121,24 @@ public class GamePlayer {
     public Set<Ship> getShips() {
         return ships;
     }
+
+    public Set<Salvo> getSalvos() {
+        return salvos;
+    }
+
+
+
+
     //endregion
 
-//CREO QUE faltan 2 metodos get
+    //region Methods
 
+    public Score getScore(){
+        return this.player.getGameScore(this.game);
+    }
+
+
+    //endregion
 
 
 
