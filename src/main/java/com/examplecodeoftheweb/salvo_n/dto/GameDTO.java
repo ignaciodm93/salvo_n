@@ -15,6 +15,9 @@ public class GameDTO {
         Map<String, Object> dto = new LinkedHashMap<>();
     }
 
+    public GameDTO(Game game){
+
+    }
 
     public Map<String, Object> makeGameDTO(Game game){
         GamePlayerDTO gamePlayerDto = new GamePlayerDTO();

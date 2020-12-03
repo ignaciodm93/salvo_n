@@ -1,14 +1,10 @@
 package com.examplecodeoftheweb.salvo_n.dto;
 
 
-import com.examplecodeoftheweb.salvo_n.model.Game;
 import com.examplecodeoftheweb.salvo_n.model.Player;
-import com.examplecodeoftheweb.salvo_n.model.Score;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 
 public class PlayerDTO {
@@ -17,6 +13,10 @@ public class PlayerDTO {
 
     //Constructor
     public PlayerDTO() {Map<String, Object> dto = new LinkedHashMap<>();
+    }
+
+    public PlayerDTO(Player player){
+
     }
 
     public Map<String, Object> makePlayerDTO(Player player){

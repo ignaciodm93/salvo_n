@@ -16,9 +16,17 @@ public class Player {
     private long id;
     private String name;
     private String email;
+    private String password;
 
+    public String getPassword() {
+        return password;
+    }
 
-    //Si lo cambio, crashea. Chequear el game.
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+//Si lo cambio, crashea. Chequear el game.
    // @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     //Set<GamePlayer> gamePlayersSet;
 
@@ -55,9 +63,15 @@ public class Player {
         //NECESARIO POR SPRING
     public Player() { }
 
-    public Player(String name, String email) {
+    public Player(String email, String password){
+        this.email = email;
+        this.password = password;
+    }
+
+    public Player(String name, String email, String password) {
         this.email = email;
         this.name = name;
+        this.password = password;
         this.scores = new HashSet<Score>();
     }
 

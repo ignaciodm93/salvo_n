@@ -60,7 +60,7 @@ public class GamePlayerDTO {
         SalvoDTO salvoDTO = new SalvoDTO();
 
         //Uso el GAME DTO tomando al gp pasado por parametro como base
-        Map<String, Object> dto = gameDTO.makeGameDTO(gp.getGame());
+        Map<String, Object> dto = gameDTO.makeGameDTO(gp.getGame());    //aca estoy citando el makeGameDTO que usa el de score
 
         //C2. Consigo las naves del game player (las que le pertenecen)
         //List<Ship> ships = gp.getShips().stream().collect(Collectors.toList());
