@@ -13,6 +13,7 @@ import com.examplecodeoftheweb.salvo_n.repository.GamePlayerRepository;
 import com.examplecodeoftheweb.salvo_n.repository.GameRepository;
 import com.examplecodeoftheweb.salvo_n.repository.PlayerRepository;
 import com.examplecodeoftheweb.salvo_n.repository.ShipRepository;
+import com.examplecodeoftheweb.salvo_n.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
 
 @RestController //permite que nuestra clase controladortodo lo que devuelva , lo hara en json.
 @RequestMapping("/api") //barra previa por default
-public class SalvoController {
+public class AppController {
 
     @Autowired //acceso al repository directo desde aca
     GameRepository gameRepository;
@@ -53,6 +54,19 @@ public class SalvoController {
     }
 
 
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Object>register(
+            @RequestParam String email,
+            @RequestParam String password){
+        if(email.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+        if (playerRepository.findByEmail(email) != null) {
+            return  new ResponseEntity<>("Name already in use",HttpStatus.FORBIDDEN);
+        }
+        playerRepository.save(new Player(email,passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 
     
 
@@ -82,37 +96,7 @@ public class SalvoController {
 
 
 
-    @RequestMapping("/games")
-    public Map<String, Object> getGameAll(Authentication authentication) {
-        Map<String,  Object>  dto = new LinkedHashMap<>();
-
-        if(isGuest(authentication)){
-            dto.put("player", "Guest");
-        }else{
-            Player player  = playerRepository.findByEmail(authentication.getName());
-            PlayerDTO   playerDTO   =   new PlayerDTO(player);
-            dto.put("player", playerDTO.makePlayerDTO(player));
-        }
-
-        dto.put("games", gameRepository.findAll()
-                .stream()
-                .map(game -> {
-                    GameDTO gameDTO =   new GameDTO(game);
-                    return  gameDTO.makeGameDTO(game);
-                })
-                .collect(Collectors.toList()));
-
-        return dto;
-
-    }
-
-    //Encontrar los datos del juego (jugadores), por el id del jugador pero solo las naves del que ingresamos el id.
-    @RequestMapping("/game_view/{id}")
-    public Map<String, Object> getGameView(@PathVariable Long id){
-        GamePlayerDTO gamePlayerDTO = new GamePlayerDTO();
-        return gamePlayerDTO.makeGameViewDTO(gamePlayerRepository.getOne(id));
-    }
-
+//Region Extras
 /* games original
     @RequestMapping("/games")
     public List<Map<String, Object>> getGameAll(){
@@ -383,78 +367,63 @@ private Map<String, Object> makePlayerDTO(Player player){
         //gpDTO = gamePlayerRepository.findById(id).stream().map(gp -> gpDTO.makeGamePlayerDTO(gamePlayerRepository.findById(id).get())).collect(Collectors.toList());
 
         return gamePlayerDTO.makeGamePlayerDTO(gamePlayerRepository.findById(id).get());
-       
 
     }
 
 
 
-/*
-    @RequestMapping(path = "/persons", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
-            @RequestParam first, @RequestParam last,
-            @RequestParam String email, @RequestParam String password) {
-
-        if (firstName.isEmpty() || last.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
-        }
-
-        if (personRepository.findOneByEmail(email) !=  null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
-        }
-
-        Punycode passwordEncoder;
-        playerRepository.save(new Person(first, last, email, passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-*/
 
     @Autowired
     PasswordEncoder passwordEncoder;
 
-/* primer intento SING IN
 
-    @RequestMapping(path = "/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
-            @RequestParam String userName,
-            @RequestParam String email,
-            @RequestParam String password) {
+    //POST para la creacion del juego desde el P1
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Object> Create(Authentication authentication) {
 
-        if (userName.isEmpty() || email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        //Indico la respuesta matcheada con el javascript cuando busca un "error", esta palabra esta escrita desde el js para ser igual.
+        if(Util.isGuest(authentication)) return new ResponseEntity<>(Util.makeMap("error", "You are not logged in"), HttpStatus.FORBIDDEN);
+
+        //Creo el nuevo futuro player
+        Player newPlayer = playerRepository.findByEmail(authentication.getName());
+
+        //Creo el nuevo futuro game
+        Game newGame = new Game();
+
+        //Creo el nuevo futuro gamePlayer y le asigno los previos creados
+        GamePlayer newGamePlayer = new GamePlayer(newGame, newPlayer);
+
+        gameRepository.save(newGame);
+        gamePlayerRepository.save(newGamePlayer);
+
+        return new ResponseEntity<>(Util.makeMap("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
+    };
+
+
+
+    @RequestMapping(value = "/game_view/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> getGameView(@PathVariable long id, Authentication authentication){
+
+        Player playerChecked = gamePlayerRepository.findById(id).get().getPlayer();
+
+        //Nunca entra aca porque el user no tiene permiso para esta vista (se edita desde el appController)
+        if(Util.isGuest(authentication)) {
+            System.out.println("is guest");
+            return new ResponseEntity<>(Util.makeMap("error", "not logged in"), HttpStatus.FORBIDDEN);
+
+        }else{
+
+            if(playerChecked.getId() != playerRepository.findByEmail(authentication.getName()).getId()){
+                System.out.println("not matchingids");
+                return new ResponseEntity<>(Util.makeMap("error", "not matching id"), HttpStatus.UNAUTHORIZED);
+
+            }
+            else{
+                GamePlayerDTO gamePlayerDTO = new GamePlayerDTO();
+                return new ResponseEntity<>(gamePlayerDTO.makeGameViewDTO(gamePlayerRepository.getOne(id)), HttpStatus.ACCEPTED);
+            }
         }
 
-        if (playerRepository.findByEmail(email) != null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
-        }
-
-
-        playerRepository.save(new Player(userName, email, passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
-
-    }
-
-*/
-
-
-    private boolean isGuest(Authentication authentication) {
-        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
-    }
-
-
-
-    @RequestMapping(path = "/players", method = RequestMethod.POST)
-    public ResponseEntity<Object>register(
-            @RequestParam String email,
-            @RequestParam String password){
-        if(email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
-        }
-        if (playerRepository.findByEmail(email) != null) {
-            return  new ResponseEntity<>("Name already in use",HttpStatus.FORBIDDEN);
-        }
-        playerRepository.save(new Player(email,passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 

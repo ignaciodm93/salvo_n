@@ -43,7 +43,6 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 	}
 
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -178,7 +177,6 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 		};
 	}
 
-
 }
 
 
@@ -227,6 +225,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 					.antMatchers("/h2-console/**").permitAll()
 					.antMatchers("/api/games").permitAll();
 
+
 			http.formLogin()
 					.usernameParameter("name")
 					.passwordParameter("pwd")
@@ -252,6 +251,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 		}
 
+
 		private void clearAuthenticationAttributes(HttpServletRequest request) {
 			HttpSession session = request.getSession(false);
 			if (session != null) {
@@ -259,6 +259,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			}
 		}
 	}
+
 
 
 }

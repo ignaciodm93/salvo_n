@@ -13,4 +13,11 @@ public interface PlayerRepository extends JpaRepository<Player, Long>{
 //    Player findByEmail(@Param("name") String name);
     Player findByEmail(@Param("email") String email);
 
+
+    //Prueba para ver si esta loggeado, devuelve true
+    //Boolean isLogged(@Param("email") String email);
+
+    //Metodo para guardar,no se si es necesario
+    //Void save(Player player);
+
 }
