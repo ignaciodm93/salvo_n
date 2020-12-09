@@ -21,7 +21,7 @@ public class PlayerDTO {
 
     public Map<String, Object> makePlayerDTO(Player player){
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", player.getId());
+        dto.put("id", player.getId());    //originalmente decia id, pero asi puedo agregar a un juego. Si le pongo gp, me pincha la leaderboard
         dto.put("name", player.getName());
         dto.put("email", player.getEmail());
 
@@ -34,7 +34,7 @@ public class PlayerDTO {
         Map<String, Object> dto = new LinkedHashMap<>();
         Map<String, Object> score = new LinkedHashMap<>();
 
-        dto.put("id", player.getId());
+        dto.put("gpid", player.getId());
         dto.put("email", player.getEmail());
         dto.put("score", score);
             score.put("total", player.getTotalScore());

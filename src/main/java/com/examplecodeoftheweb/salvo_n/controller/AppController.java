@@ -45,15 +45,16 @@ public class AppController {
 
 
     @RequestMapping("/players")
-    public List<Map<String, Object>> getPlayerAll(){
+    public List<Map<String, Object>> getPlayerAll() {
         PlayerDTO playerDto = new PlayerDTO();
         return playerRepository.findAll()
                 .stream()
-                .map(player ->  playerDto.makePlayerDTO(player))
+                .map(player -> playerDto.makePlayerDTO(player))
                 .collect(Collectors.toList());
     }
 
 
+    //Una vez que entra aca se le pasan los valores a evaluar y luego guardar
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object>register(
             @RequestParam String email,
@@ -62,13 +63,13 @@ public class AppController {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
         }
         if (playerRepository.findByEmail(email) != null) {
+            System.out.println("name already in use");
             return  new ResponseEntity<>("Name already in use",HttpStatus.FORBIDDEN);
         }
-        playerRepository.save(new Player(email,passwordEncoder.encode(password)));
+        playerRepository.save(new Player(email,passwordEncoder.encode(password)));  //Aca encripto la contraseña al guardarla (chequear h2 console)
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    
 
     @Autowired
     ShipRepository shipRepository;
@@ -372,7 +373,7 @@ private Map<String, Object> makePlayerDTO(Player player){
 
 
 
-
+    //Para permitirme encodear passwords al momento de crearlas y guardarlas en la bd.
     @Autowired
     PasswordEncoder passwordEncoder;
 
@@ -382,10 +383,11 @@ private Map<String, Object> makePlayerDTO(Player player){
     public ResponseEntity<Object> Create(Authentication authentication) {
 
         //Indico la respuesta matcheada con el javascript cuando busca un "error", esta palabra esta escrita desde el js para ser igual.
-        if(Util.isGuest(authentication)) return new ResponseEntity<>(Util.makeMap("error", "You are not logged in"), HttpStatus.FORBIDDEN);
+        //Chequea si el que mando lasolicitud es un "guest", de ser asi, no hay nadie logeado, por lo que no puede crear una partida
+        if(Util.isGuest(authentication)) return new ResponseEntity<>(Util.makeMap("error", "You are not logged in"), HttpStatus.UNAUTHORIZED);  //lo cambie de FORBIDEN
 
-        //Creo el nuevo futuro player
-        Player newPlayer = playerRepository.findByEmail(authentication.getName());
+        //Creo el nuevo futuro player. Recordemos que authentication posee los datos del usuario que hace la request.
+        Player newPlayer = playerRepository.findByEmail(authentication.getName()); //aca por getName nos referimos al name de validacion que usa para loggearse
 
         //Creo el nuevo futuro game
         Game newGame = new Game();
@@ -393,16 +395,25 @@ private Map<String, Object> makePlayerDTO(Player player){
         //Creo el nuevo futuro gamePlayer y le asigno los previos creados
         GamePlayer newGamePlayer = new GamePlayer(newGame, newPlayer);
 
+        //guardo ambos
         gameRepository.save(newGame);
         gamePlayerRepository.save(newGamePlayer);
 
+        //retorno el responseEntity de que si se pudo hacer, con un HttpStatus Created.
         return new ResponseEntity<>(Util.makeMap("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
     };
 
 
 
+
+
+
+    //Metodo GET para unirse o ver un tablero de juego.
+    //Aca lo que se hace es evaluar que el que se quiera unir sea el mismo gp que ya esta jugando, para que no haga trampa
     @RequestMapping(value = "/game_view/{id}", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> getGameView(@PathVariable long id, Authentication authentication){
+        //Aca el primer parametro enviado es el id de l
+
 
         Player playerChecked = gamePlayerRepository.findById(id).get().getPlayer();
 
@@ -414,7 +425,7 @@ private Map<String, Object> makePlayerDTO(Player player){
         }else{
 
             if(playerChecked.getId() != playerRepository.findByEmail(authentication.getName()).getId()){
-                System.out.println("not matchingids");
+                System.out.println("not matching ids");
                 return new ResponseEntity<>(Util.makeMap("error", "not matching id"), HttpStatus.UNAUTHORIZED);
 
             }

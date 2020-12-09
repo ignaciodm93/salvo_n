@@ -43,6 +43,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 	}
 
+	//Para encriptar las contraseñas antes de guardarlas
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -95,7 +96,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			GamePlayer gamePlayer8 = new GamePlayer(g4, p6);
 
 			GamePlayer gamePlayer9 = new GamePlayer(g5, p1);
-			GamePlayer gamePlayer10 = new GamePlayer(g5, p6);
+			//GamePlayer gamePlayer10 = new GamePlayer(g5, p6);
 
 			GPrepository.save(gamePlayer1);
 			GPrepository.save(gamePlayer2);
@@ -106,7 +107,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			GPrepository.save(gamePlayer7);
 			GPrepository.save(gamePlayer8);
 			GPrepository.save(gamePlayer9);
-			GPrepository.save(gamePlayer10);
+			//GPrepository.save(gamePlayer10);
 
 			Score score_4 = new Score(1.0, Date.from(Instant.now()), p1, g1);
 			Score score_5 = new Score(0.0, Date.from(Instant.now()), p2, g1);
@@ -179,13 +180,18 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 }
 
-
+	//Con esto setteamos a la base de datos como fuente para la autenticacion
 	@Configuration
 	class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
 		@Autowired
 		PlayerRepository playerRepository;
 
+		//Toma un parametro pasado por el front y lo chequea con la base de datos usando
+			//el metodo declarado en el repositorio de player:
+		//Si lo encuentra crea y retorna un objeto org.springframework.security.core.userdetails.User,
+			//suministrando asi los nombres, contraseñas y roles que dicho usuario posee.
+		//El encargado de chequear la contraseña es Spring, que lo ahce de forma interna.
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
 			auth.userDetailsService(inputName-> {
@@ -251,7 +257,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 		}
 
-
+		//defined to remove the flag Spring sets when an unauthenticated user attempts to access some resource.
 		private void clearAuthenticationAttributes(HttpServletRequest request) {
 			HttpSession session = request.getSession(false);
 			if (session != null) {
