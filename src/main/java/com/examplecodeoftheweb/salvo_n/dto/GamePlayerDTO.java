@@ -5,6 +5,7 @@ import com.examplecodeoftheweb.salvo_n.model.GamePlayer;
 import com.examplecodeoftheweb.salvo_n.model.Salvo;
 import com.examplecodeoftheweb.salvo_n.model.Ship;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,12 @@ public class GamePlayerDTO {
         //Uso el GAME DTO tomando al gp pasado por parametro como base
         Map<String, Object> dto = gameDTO.makeGameDTO(gp.getGame());    //aca estoy citando el makeGameDTO que usa el de score
 
+        Map<String, Object> hits = new LinkedHashMap<>();
+
+        hits.put("self", new ArrayList<>());
+        hits.put("opponent", new ArrayList<>());
+
+
         //C2. Consigo las naves del game player (las que le pertenecen)
         //List<Ship> ships = gp.getShips().stream().collect(Collectors.toList());
 
@@ -78,6 +85,10 @@ public class GamePlayerDTO {
         dto.put("salvoes", gp.getGame().getGamePlayers().stream().flatMap(gamePlayer -> gamePlayer.getSalvos().stream()
                 .map(salvo -> salvoDTO.makeSalvoDTO(salvo)))
                 .collect(Collectors.toList()));
+
+        dto.put("hits", hits);
+        dto.put("gameState", "PLACESHIPS");
+
 
         return dto;
     }

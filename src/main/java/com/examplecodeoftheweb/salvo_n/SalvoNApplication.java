@@ -43,6 +43,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 	}
 
+	//Para encriptar las contraseñas antes de guardarlas
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -179,13 +180,18 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 }
 
-
+	//Con esto setteamos a la base de datos como fuente para la autenticacion
 	@Configuration
 	class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
 		@Autowired
 		PlayerRepository playerRepository;
 
+		//Toma un parametro pasado por el front y lo chequea con la base de datos usando
+			//el metodo declarado en el repositorio de player:
+		//Si lo encuentra crea y retorna un objeto org.springframework.security.core.userdetails.User,
+			//suministrando asi los nombres, contraseñas y roles que dicho usuario posee.
+		//El encargado de chequear la contraseña es Spring, que lo ahce de forma interna.
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
 			auth.userDetailsService(inputName-> {
@@ -251,7 +257,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 		}
 
-
+		//defined to remove the flag Spring sets when an unauthenticated user attempts to access some resource.
 		private void clearAuthenticationAttributes(HttpServletRequest request) {
 			HttpSession session = request.getSession(false);
 			if (session != null) {

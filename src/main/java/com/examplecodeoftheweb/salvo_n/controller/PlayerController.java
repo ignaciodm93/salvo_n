@@ -14,9 +14,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+@RestController
+@RequestMapping("/api")
 public class PlayerController {
 
 
@@ -30,7 +33,7 @@ public class PlayerController {
     GameRepository gameRepository;
 
 
-    @RequestMapping(path ="/games/{nn}/players", method = RequestMethod.POST)
+    @RequestMapping(path ="/game/{idGame}/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> joinGame(@PathVariable long idGame, Authentication authentication){
 
 
