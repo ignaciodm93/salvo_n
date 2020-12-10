@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,7 +34,9 @@ public class GamePlayer {
     @JoinColumn(name="game_id")
     private Game game;
 
-
+    public void setShips(Set<Ship> ships) {
+        this.ships = ships;
+    }
 
     //prueba lean
     @OneToMany(mappedBy = "gamePlayer", fetch=FetchType.EAGER)
@@ -59,10 +62,15 @@ public class GamePlayer {
 
 
     //region Mathods
-    public void addShips(Ship newShip){
+    public void addShip(Ship newShip){
         this.ships.add(newShip);
         newShip.setGamePlayer(this);
     }
+
+    public void addShips(List<Ship> ships){
+        ships = ships;
+    }
+
 
     //Prueba
     public void addSalvo(Salvo newSalvo){
