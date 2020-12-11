@@ -5,10 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class GamePlayer {
@@ -70,6 +67,12 @@ public class GamePlayer {
     public void addShips(List<Ship> ships){
         ships = ships;
     }
+
+
+    public void addSalvos(List<Salvo> salvos){
+        salvos = salvos;
+    }
+
 
 
     //Prueba
@@ -144,6 +147,14 @@ public class GamePlayer {
     public Score getScore(){
         return this.player.getGameScore(this.game);
     }
+
+
+    public static Optional<GamePlayer> getOpponent(GamePlayer gamePlayer){
+        GamePlayer opponent = gamePlayer.getGame().getGamePlayers().stream()
+                .filter(gp -> gp.getId() != gamePlayer.getId()).findFirst().get();
+        return Optional.of(opponent);
+    }
+
 
 
     //endregion

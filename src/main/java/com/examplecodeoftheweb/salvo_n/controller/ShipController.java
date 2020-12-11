@@ -102,6 +102,7 @@ public class ShipController {
 
         gamePlayerRepository.save(gamePlayerRepository.findById(gamePlayerID).get());
         return new ResponseEntity<>(Util.makeMap("OK", "Success"), HttpStatus.CREATED);
+            //El javascript recibe el responseEntity y lo linkea buscando el mensaje OK, para saber que mostrar en el front.
     }
 
 
