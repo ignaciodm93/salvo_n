@@ -6,6 +6,8 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.Comparator;
 
 @Entity
 public class GamePlayer {
@@ -55,6 +57,7 @@ public class GamePlayer {
 
     //ensayo para conexion con Salvos. Si pincha, borrar. Funciona, guarda con las mayusculas.
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    @OrderBy
     private Set<Salvo> salvos  = new HashSet<Salvo>();
 
 
@@ -158,6 +161,40 @@ public class GamePlayer {
 
 
     //endregion
+
+
+    public long getLastTurn(GamePlayer gamePlayer){
+
+        //long turn = gamePlayer.getSalvos().stream().max(Long:: compare).get();
+
+        long turn = gamePlayer.getSalvos().stream().map(s -> s.getTurn()).max(Long:: compare).get();
+
+
+        return turn;
+
+    }
+
+
+    public static long CurrentTurn(GamePlayer gp){
+
+        List<Long> turnsList = gp.getSalvos().stream().map(s -> s.getTurn()).collect(Collectors.toList());
+
+        long lastTurn = Collections.max(turnsList);
+
+        return lastTurn;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

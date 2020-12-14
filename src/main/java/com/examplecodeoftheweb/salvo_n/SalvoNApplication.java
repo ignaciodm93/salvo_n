@@ -142,7 +142,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			Ship ship5 = new Ship("patrolboat", List.of("F1", "F2"), gamePlayer1);
 
 			Ship ship6 = new Ship("carrier", List.of("A1", "B1", "C1", "D1", "E1"), gamePlayer2);
-			Ship ship7 = new Ship("battleship", List.of("B6", "B3", "B4", "B5"), gamePlayer2);
+			Ship ship7 = new Ship("battleship", List.of("B3", "B4", "B5", "B6"), gamePlayer2);
 			Ship ship8 = new Ship("submarine", List.of("H3", "H4", "H5"), gamePlayer2);
 			Ship ship9 = new Ship("destroyer", List.of("D7", "E7", "F7"), gamePlayer2);
 			Ship ship10 = new Ship("patrolboat", List.of("J9", "J10"), gamePlayer2);
@@ -162,14 +162,14 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 			//Salvoes
 			//prueba, creo que no se deberia hacer asi
-			/*Salvo salvo_1 = new Salvo(1, List.of("A3","B3","C3"), gamePlayer1);
-			Salvo salvo_2 = new Salvo(1, List.of("F1","D7","B9"), gamePlayer2);
-			Salvo salvo_3 = new Salvo(1, List.of("B5", "B6", "B7"), gamePlayer3);
-			Salvo salvo_4 = new Salvo(1, List.of("A5", "B9", "E3"), gamePlayer4);
+			Salvo salvo_1 = new Salvo(1, List.of("A10","B10","C10", "G10", "G10"), gamePlayer1);
+			Salvo salvo_2 = new Salvo(1, List.of("F10","D10","B10", "G10", "G10"), gamePlayer2);
+			//Salvo salvo_3 = new Salvo(1, List.of("B5", "B6", "B7", "B8", "B9"), gamePlayer3);
+			//Salvo salvo_4 = new Salvo(1, List.of("C1", "C2", "C3", "C4", "C5"), gamePlayer2);
 
 			salvoRepository.save(salvo_1);
 			salvoRepository.save(salvo_2);
-			salvoRepository.save(salvo_3);
+			/*salvoRepository.save(salvo_3);
 			salvoRepository.save(salvo_4);*/
 
 			repository.save(p1);

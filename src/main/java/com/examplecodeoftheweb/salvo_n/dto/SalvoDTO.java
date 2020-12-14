@@ -1,10 +1,12 @@
 package com.examplecodeoftheweb.salvo_n.dto;
 
+import com.examplecodeoftheweb.salvo_n.model.GamePlayer;
 import com.examplecodeoftheweb.salvo_n.model.Salvo;
 import com.examplecodeoftheweb.salvo_n.model.Ship;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class SalvoDTO {
 
@@ -25,6 +27,51 @@ public class SalvoDTO {
 
         return dto;
     }
+
+
+
+
+
+
+    //Prueba 11.12.20
+    public Map<String, Object> getHitsDto(Salvo salvoShoot){
+
+
+        Map<String, Object> dtoHits = new LinkedHashMap<>();
+
+        Map<String, Object> shipHits = new LinkedHashMap<>();
+
+        GamePlayer me = salvoShoot.getGamePlayer();
+
+        Set<Ship> enemyShipList = GamePlayer.getOpponent(me).get().getShips();
+        Set<Salvo> mySalvos = me.getSalvos();
+
+        dtoHits.put("Hits", enemyShipList.stream().filter(ship -> ship.getLocations().equals(enemyShipList.stream().map(s -> s.getLocations()))));
+
+
+        return dtoHits;
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
