@@ -423,8 +423,11 @@ private Map<String, Object> makePlayerDTO(Player player){
             if(playerChecked.getId() != playerRepository.findByEmail(authentication.getName()).getId()){
                 System.out.println("not matching ids");
                 return new ResponseEntity<>(Util.makeMap("error", "not matching id"), HttpStatus.UNAUTHORIZED);
-
             }
+
+           /* if(gameRepository.findById(gamePlayerRepository.findById(id).get().getGame().getId()).get().getGamePlayers().size() != 2 ){
+                    return new ResponseEntity<>(Util.makeMap("error", "Only one player in game, waiting..."), HttpStatus.UNAUTHORIZED);
+            }*/
             else{
                 GamePlayerDTO gamePlayerDTO = new GamePlayerDTO();
                 return new ResponseEntity<>(gamePlayerDTO.makeGameViewDTO(gamePlayerRepository.getOne(id)), HttpStatus.ACCEPTED);

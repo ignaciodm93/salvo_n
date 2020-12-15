@@ -61,6 +61,7 @@ public class Game {
     //prueba
     public Game(){
         created = LocalDateTime.now();
+        this.gamePlayers = new HashSet<>();
     }
     //endregion
 

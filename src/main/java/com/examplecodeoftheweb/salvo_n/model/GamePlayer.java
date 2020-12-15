@@ -97,7 +97,8 @@ public class GamePlayer {
 
 
     public GamePlayer(){
-
+         Set<Ship> ships = new HashSet<Ship>();
+        Set<Salvo> salvos  = new HashSet<Salvo>();
     }
     //endregion
 

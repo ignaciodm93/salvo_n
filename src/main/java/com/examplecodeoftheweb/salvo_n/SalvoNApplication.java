@@ -174,7 +174,6 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 			repository.save(p1);
 
-
 		};
 	}
 

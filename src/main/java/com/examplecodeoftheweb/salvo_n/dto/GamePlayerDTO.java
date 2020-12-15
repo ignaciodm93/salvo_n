@@ -7,6 +7,7 @@ import com.examplecodeoftheweb.salvo_n.model.Salvo;
 import com.examplecodeoftheweb.salvo_n.model.Ship;
 import com.examplecodeoftheweb.salvo_n.repository.GamePlayerRepository;
 import com.examplecodeoftheweb.salvo_n.repository.SalvoRepository;
+import com.examplecodeoftheweb.salvo_n.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Array;
@@ -71,12 +72,12 @@ public class GamePlayerDTO {
         Map<String, Object> dto = gameDTO.makeGameDTO(gp.getGame());    //aca estoy citando el makeGameDTO que usa el de score
         //Map[] self = new Map[3];
         Map<String, Object> hits = new LinkedHashMap<>();
-        Map<String, Object> self = new LinkedHashMap<>();
+        /*Map<String, Object> self = new LinkedHashMap<>();*/
 
         //hits.put("self", new ArrayList<>());
         HitsDTO hitsDTO = new HitsDTO();
-        hits.put("self", hitsDTO.makeHitsDTO(gp));
-        hits.put("opponent", hitsDTO.makeHitsDTO(GamePlayer.getOpponent(gp).get()));
+        /*hits.put("self", hitsDTO.makeHitsDTO(gp));
+        hits.put("opponent", hitsDTO.makeHitsDTO(GamePlayer.getOpponent(gp).get()));*/
 
 
         //C2. Consigo las naves del game player (las que le pertenecen)
@@ -97,24 +98,23 @@ public class GamePlayerDTO {
                 .collect(Collectors.toList()));
 
         //ORIGINALES
+
+
+
+
+
+        if(gp.getGame().getGamePlayers().size() == 2){
+            hits.put("self", hitsDTO.makeHitsDTO(gp));
+            hits.put("opponent", hitsDTO.makeHitsDTO(GamePlayer.getOpponent(gp).get()));
+
+        }else{
+
+            hits.put("self", new ArrayList<>());
+            hits.put("opponent", new ArrayList<>());
+        }
+
         dto.put("hits", hits);
-        //dto.put("gameState", "PLACESHIPS");
-        dto.put("gameState", "PLAY");
-
-
-        //self.put("hitLocations", this.makeHitsDTO3(gp));
-
-        //self.put("hitLocations", gp.getSalvos().stream().map(s -> hitsDTO.getDetailedHitsDTO(s)).collect(Collectors.toList()));
-        //self.put("hitLocations", gp.getSalvos().stream().map(s -> hitsDTO.getDetailedHitsDTO(s)));
-
-        //hits.put("self", hitsDTO.makeHitsDTO(gp));
-        //hits.put("opponent", hitsDTO.makeHitsDTO(GamePlayer.getOpponent(gp).get()));
-
-
-        //self.put("hitLocations", hitsDTO.makeHitsDTO(gp));
-
-
-
+        dto.put("gameState", Util.stateGame(gp));
 
 
 
@@ -122,7 +122,6 @@ public class GamePlayerDTO {
 
 
         return dto;
-
     }
 
 

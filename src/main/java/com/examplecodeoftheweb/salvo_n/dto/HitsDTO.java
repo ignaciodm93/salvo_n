@@ -31,7 +31,7 @@ public class HitsDTO {
     //Funciona
     public List<Map<String, Object>> makeHitsDTO(GamePlayer gamePlayer){
 
-        List<Map<String, Object>>hits = new ArrayList<>();
+        List<Map<String, Object>> hits = new ArrayList<>();
 
         List<String>carrierLocations = Util.getLocationsByType("carrier", gamePlayer);
         List<String>battleshipLocations = Util.getLocationsByType("battleship", gamePlayer);
@@ -77,6 +77,10 @@ public class HitsDTO {
                     carrierDamage += 1;
                     carrierHits += 1;
                     missed--;
+
+
+
+
                 }
 
 
@@ -154,12 +158,56 @@ public class HitsDTO {
         }
 
         return hits;
+    }
+
+
+
+
+
+
+
+
+
+
+    public int makeDamage(GamePlayer gamePlayer){
+        List<String>carrierLocations= new ArrayList<String>();
+        List<String>battleshipLocations = new ArrayList<>();
+        List<String>submarineLocations = new ArrayList<>();
+        List<String>destroyerLocations = new ArrayList<>();
+        List<String>patrolBoatLocations = new ArrayList<>();
+
+        carrierLocations= Util.getLocationsByType("carrier", gamePlayer);
+        battleshipLocations=Util.getLocationsByType("battleship", gamePlayer);
+        submarineLocations=Util.getLocationsByType("submarine", gamePlayer);
+        destroyerLocations=Util.getLocationsByType("destroyer",gamePlayer);
+        patrolBoatLocations=Util.getLocationsByType("patrolboat", gamePlayer);
+
+        int countImpact=0;
+
+        for(Salvo salvo: GamePlayer.getOpponent(gamePlayer).get().getSalvos()){
+
+            for(String location: salvo.getLocations()){
+                if (carrierLocations.contains(location)){
+                    countImpact++;
+                }
+                if (battleshipLocations.contains(location)){
+                    countImpact++;
+                }
+                if (submarineLocations.contains(location)){
+                    countImpact++;
+                }
+                if (destroyerLocations.contains(location)){
+                    countImpact++;
+                }
+                if (patrolBoatLocations.contains(location)){
+                    countImpact++;
+                }
+            }
+
         }
+        return countImpact++;
 
-
-
-
-
+    }
 
 
 
