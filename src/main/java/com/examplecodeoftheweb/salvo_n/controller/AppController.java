@@ -5,14 +5,8 @@ import com.examplecodeoftheweb.salvo_n.dto.GameDTO;
 import com.examplecodeoftheweb.salvo_n.dto.GamePlayerDTO;
 import com.examplecodeoftheweb.salvo_n.dto.PlayerDTO;
 import com.examplecodeoftheweb.salvo_n.dto.ShipDTO;
-import com.examplecodeoftheweb.salvo_n.model.Game;
-import com.examplecodeoftheweb.salvo_n.model.GamePlayer;
-import com.examplecodeoftheweb.salvo_n.model.Player;
-import com.examplecodeoftheweb.salvo_n.model.Ship;
-import com.examplecodeoftheweb.salvo_n.repository.GamePlayerRepository;
-import com.examplecodeoftheweb.salvo_n.repository.GameRepository;
-import com.examplecodeoftheweb.salvo_n.repository.PlayerRepository;
-import com.examplecodeoftheweb.salvo_n.repository.ShipRepository;
+import com.examplecodeoftheweb.salvo_n.model.*;
+import com.examplecodeoftheweb.salvo_n.repository.*;
 import com.examplecodeoftheweb.salvo_n.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -406,7 +400,7 @@ private Map<String, Object> makePlayerDTO(Player player){
 
     //Metodo GET para unirse o ver un tablero de juego.
     //Aca lo que se hace es evaluar que el que se quiera unir sea el mismo gp que ya esta jugando, para que no se pantalle
-    @RequestMapping(value = "/game_view/{id}", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/game_view/{id}", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> getGameView(@PathVariable long id, Authentication authentication){
         //Aca el primer parametro enviado es el id de l
 
@@ -425,16 +419,112 @@ private Map<String, Object> makePlayerDTO(Player player){
                 return new ResponseEntity<>(Util.makeMap("error", "not matching id"), HttpStatus.UNAUTHORIZED);
             }
 
-           /* if(gameRepository.findById(gamePlayerRepository.findById(id).get().getGame().getId()).get().getGamePlayers().size() != 2 ){
+           *//* if(gameRepository.findById(gamePlayerRepository.findById(id).get().getGame().getId()).get().getGamePlayers().size() != 2 ){
                     return new ResponseEntity<>(Util.makeMap("error", "Only one player in game, waiting..."), HttpStatus.UNAUTHORIZED);
-            }*/
+            }*//*
             else{
                 GamePlayerDTO gamePlayerDTO = new GamePlayerDTO();
                 return new ResponseEntity<>(gamePlayerDTO.makeGameViewDTO(gamePlayerRepository.getOne(id)), HttpStatus.ACCEPTED);
             }
         }
 
+    }*/
+
+
+    @Autowired
+    ScoreRepository scoreRepository;
+
+
+    @RequestMapping(path = "/game_view/{ID}", method = RequestMethod.GET )
+    public ResponseEntity<Map<String, Object>> getGamePlayerView(@PathVariable long ID, Authentication authentication) {
+        if (Util.isGuest(authentication)) {
+            return new ResponseEntity<>(Util.makeMap("error", "Not Logged in"), HttpStatus.UNAUTHORIZED);
+        }
+        Long playerLogged = playerRepository.findByEmail(authentication.getName()).getId();
+        Long playerCheck = gamePlayerRepository.getOne(ID).getPlayer().getId();
+
+        if (playerLogged != playerCheck){
+            return new ResponseEntity<>(Util.makeMap("error", "This is not your game"), HttpStatus.FORBIDDEN);
+        }
+
+
+
+        GamePlayerDTO dtoGame_View = new GamePlayerDTO();
+        GamePlayer gamePlayer = gamePlayerRepository.getOne(ID);
+        Game game = gamePlayer.getGame();
+        if(Util.stateGame(gamePlayer) == "WON"){
+            if(gamePlayer.getGame().getScores().size()<2) {
+                Set<Score> scores = new HashSet<>();
+                Score score1 = new Score();
+                score1.setPlayer(gamePlayer.getPlayer());
+                score1.setGame(gamePlayer.getGame());
+                score1.setFinishDate(LocalDateTime.now());
+                score1.setScore(1D);
+                //Score score1 = new Score(1.0, game.getDate(), gamePlayer.getPlayer(), game);
+                scoreRepository.save(score1);
+                Score score2 = new Score();
+                score2.setPlayer(GamePlayer.getOpponent(gamePlayer).get().getPlayer());
+                score2.setGame(gamePlayer.getGame());
+                score2.setFinishDate(LocalDateTime.now());
+                score2.setScore(0D);
+                scoreRepository.save(score2);
+                scores.add(score1);
+                scores.add(score2);
+                //Score score_4 = new Score(1.0, java.sql.Date.from(Instant.now()), p1, g1);
+                GamePlayer.getOpponent(gamePlayer).get().getGame().setScores(scores);
+            }
+        }
+        if(Util.stateGame(gamePlayer) == "TIE"){
+            if(gamePlayer.getGame().getScores().size()<2) {
+                Set<Score> scores = new HashSet<Score>();
+                Score score1 = new Score();
+                score1.setPlayer(gamePlayer.getPlayer());
+                score1.setGame(gamePlayer.getGame());
+                score1.setFinishDate(LocalDateTime.now());
+                score1.setScore(0.5D);
+                scoreRepository.save(score1);
+                Score score2 = new Score();
+                score2.setPlayer(GamePlayer.getOpponent(gamePlayer).get().getPlayer());
+                score2.setGame(gamePlayer.getGame());
+                score2.setFinishDate(LocalDateTime.now());
+                score2.setScore(0.5D);
+                scoreRepository.save(score2);
+                scores.add(score1);
+                scores.add(score2);
+
+                GamePlayer.getOpponent(gamePlayer).get().getGame().setScores(scores);
+            }
+        }
+        return new ResponseEntity<>(dtoGame_View.makeGameViewDTO(gamePlayerRepository.getOne(ID)), HttpStatus.ACCEPTED);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

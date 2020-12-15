@@ -101,8 +101,6 @@ public class GamePlayerDTO {
 
 
 
-
-
         if(gp.getGame().getGamePlayers().size() == 2){
             hits.put("self", hitsDTO.makeHitsDTO(gp));
             hits.put("opponent", hitsDTO.makeHitsDTO(GamePlayer.getOpponent(gp).get()));
@@ -115,10 +113,6 @@ public class GamePlayerDTO {
 
         dto.put("hits", hits);
         dto.put("gameState", Util.stateGame(gp));
-
-
-
-
 
 
         return dto;

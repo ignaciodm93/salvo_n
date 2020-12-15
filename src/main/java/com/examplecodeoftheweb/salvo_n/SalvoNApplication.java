@@ -3,6 +3,7 @@ package com.examplecodeoftheweb.salvo_n;
 
 import com.examplecodeoftheweb.salvo_n.model.*;
 import com.examplecodeoftheweb.salvo_n.repository.*;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -109,8 +110,8 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			GPrepository.save(gamePlayer9);
 			GPrepository.save(gamePlayer10);
 
-			Score score_4 = new Score(1.0, Date.from(Instant.now()), p1, g1);
-			Score score_5 = new Score(0.0, Date.from(Instant.now()), p2, g1);
+			/*Score score_4 = new Score(1.0, LocalDateTime.now(), p1, g1);
+			Score score_5 = new Score(0.0, LocalDateTime.now(), p2, g1);
 
 			Score score_6 = new Score(0.5, Date.from(Instant.now()), p3, g2);
 			Score score_7 = new Score(0.5, Date.from(Instant.now()), p4, g2);
@@ -122,9 +123,9 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			Score score_11 = new Score(0.0, Date.from(Instant.now()), p6, g4);
 
 			Score score_12 = new Score(1.0, Date.from(Instant.now()), p1, g5);
-			Score score_13 = new Score(0.0, Date.from(Instant.now()), p6, g5);
+			Score score_13 = new Score(0.0, Date.from(Instant.now()), p6, g5);*/
 
-			scoreRepository.save(score_4);
+			/*scoreRepository.save(score_4);
 			scoreRepository.save(score_5);
 			scoreRepository.save(score_6);
 			scoreRepository.save(score_7);
@@ -133,7 +134,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			scoreRepository.save(score_10);
 			scoreRepository.save(score_11);
 			scoreRepository.save(score_12);
-			scoreRepository.save(score_13);
+			scoreRepository.save(score_13);*/
 
 			Ship ship1 = new Ship("carrier", List.of("A1", "A2", "A3", "A4", "A5"), gamePlayer1);
 			Ship ship2 = new Ship("battleship", List.of("E1", "E2", "E3", "E4"), gamePlayer1);
@@ -162,15 +163,15 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 			//Salvoes
 			//prueba, creo que no se deberia hacer asi
-			Salvo salvo_1 = new Salvo(1, List.of("A10","B10","C10", "G10", "G10"), gamePlayer1);
-			Salvo salvo_2 = new Salvo(1, List.of("F10","D10","B10", "G10", "G10"), gamePlayer2);
-			//Salvo salvo_3 = new Salvo(1, List.of("B5", "B6", "B7", "B8", "B9"), gamePlayer3);
-			//Salvo salvo_4 = new Salvo(1, List.of("C1", "C2", "C3", "C4", "C5"), gamePlayer2);
+			Salvo salvo_1 = new Salvo(1, List.of("A1", "B1", "C1", "D1", "E1"), gamePlayer1);
+			Salvo salvo_2 = new Salvo(2, List.of("B3", "B4", "B5", "B6", "G10"), gamePlayer1);
+			Salvo salvo_3 = new Salvo(3, List.of("H3", "H4", "H5", "B8", "B9"), gamePlayer1);
+			Salvo salvo_4 = new Salvo(4, List.of("D7", "E7", "F7", "J9", "C5"), gamePlayer1);
 
 			salvoRepository.save(salvo_1);
 			salvoRepository.save(salvo_2);
-			/*salvoRepository.save(salvo_3);
-			salvoRepository.save(salvo_4);*/
+			salvoRepository.save(salvo_3);
+			salvoRepository.save(salvo_4);
 
 			repository.save(p1);
 

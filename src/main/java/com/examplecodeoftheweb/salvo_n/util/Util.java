@@ -4,6 +4,8 @@ import com.examplecodeoftheweb.salvo_n.dto.HitsDTO;
 import com.examplecodeoftheweb.salvo_n.model.Game;
 import com.examplecodeoftheweb.salvo_n.model.GamePlayer;
 import com.examplecodeoftheweb.salvo_n.model.Ship;
+import com.examplecodeoftheweb.salvo_n.repository.PlayerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
@@ -13,6 +15,9 @@ import java.util.List;
 import java.util.stream.Collector;
 
 public class Util {
+
+
+
 
     public static Map<String, Object> makeMap(String key, Object value) {
         Map<String, Object> map = new HashMap<>();
@@ -88,12 +93,6 @@ public class Util {
 
 
 
-
-
-
-
-
-
     public static String stateGame(GamePlayer gamePlayer){
 
         if(gamePlayer.getGame().getGamePlayers().size()==2) {
@@ -102,9 +101,9 @@ public class Util {
             int opponentImpact= dtoHit.makeDamage(gamePlayer.getOpponent(gamePlayer).get());
             if(mySelfImpact==17 && opponentImpact==17){
                 return  "TIDE";
-            }else if(mySelfImpact==17){
+            }else if(mySelfImpact==17 && (gamePlayer.getSalvos().size() == GamePlayer.getOpponent(gamePlayer).get().getSalvos().size() )){
                 return "LOSE";
-            }else if(opponentImpact==17){
+            }else if(opponentImpact==17 && (gamePlayer.getSalvos().size() == GamePlayer.getOpponent(gamePlayer).get().getSalvos().size() )){
                 return "WON";
             }
         }
@@ -112,40 +111,13 @@ public class Util {
             return "PLACESHIPS";
         }else if(gamePlayer.getGame().getGamePlayers().size()==1 || GamePlayer.getOpponent(gamePlayer).get().getShips().size() == 0){
             return "WAITINGFOROPP";
-        }else {
+        }else if(gamePlayer.getSalvos().size() > GamePlayer.getOpponent(gamePlayer).get().getSalvos().size() ){
+            return "WAIT";
+        }
+        else {
             return "PLAY";
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*public static String gameState(GamePlayer gamePlayer){
-        if(gamePlayer.getShips().isEmpty()){
-            return "PLACESHIPS";
-        }
-        if(gamePlayer.getGame().getGamePlayers().size() == 1){
-            return "WAITINGFOROPP";
-        }
-
-
-
-        return "PLAY";
-    }*/
-
 
 
 
