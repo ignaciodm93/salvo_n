@@ -11,15 +11,13 @@ import com.examplecodeoftheweb.salvo_n.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -458,14 +456,14 @@ private Map<String, Object> makePlayerDTO(Player player){
                 Score score1 = new Score();
                 score1.setPlayer(gamePlayer.getPlayer());
                 score1.setGame(gamePlayer.getGame());
-                score1.setFinishDate(LocalDateTime.now());
+                score1.setFinishDate(ZonedDateTime.now());
                 score1.setScore(1D);
                 //Score score1 = new Score(1.0, game.getDate(), gamePlayer.getPlayer(), game);
                 scoreRepository.save(score1);
                 Score score2 = new Score();
                 score2.setPlayer(GamePlayer.getOpponent(gamePlayer).get().getPlayer());
                 score2.setGame(gamePlayer.getGame());
-                score2.setFinishDate(LocalDateTime.now());
+                score2.setFinishDate(ZonedDateTime.now());
                 score2.setScore(0D);
                 scoreRepository.save(score2);
                 scores.add(score1);
@@ -480,13 +478,13 @@ private Map<String, Object> makePlayerDTO(Player player){
                 Score score1 = new Score();
                 score1.setPlayer(gamePlayer.getPlayer());
                 score1.setGame(gamePlayer.getGame());
-                score1.setFinishDate(LocalDateTime.now());
+                score1.setFinishDate(ZonedDateTime.now());
                 score1.setScore(0.5D);
                 scoreRepository.save(score1);
                 Score score2 = new Score();
                 score2.setPlayer(GamePlayer.getOpponent(gamePlayer).get().getPlayer());
                 score2.setGame(gamePlayer.getGame());
-                score2.setFinishDate(LocalDateTime.now());
+                score2.setFinishDate(ZonedDateTime.now());
                 score2.setScore(0.5D);
                 scoreRepository.save(score2);
                 scores.add(score1);

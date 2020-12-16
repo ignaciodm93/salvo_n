@@ -55,7 +55,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 		return (args) -> {
 
 
-			//Players
+			/*//Players
 			Player p1 = new Player("Jack Bauer", "j.bauer@ctu.gov", passwordEncoder().encode("123"));
 			Player p2 = new Player("Chloe O'Brian", "c.obrian@ctu.gov", passwordEncoder().encode("123"));
 			Player p3 = new Player("Kim bauer", "kim_bauer@gmail.com", passwordEncoder().encode("123"));
@@ -110,7 +110,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			GPrepository.save(gamePlayer9);
 			GPrepository.save(gamePlayer10);
 
-			/*Score score_4 = new Score(1.0, LocalDateTime.now(), p1, g1);
+			*//*Score score_4 = new Score(1.0, LocalDateTime.now(), p1, g1);
 			Score score_5 = new Score(0.0, LocalDateTime.now(), p2, g1);
 
 			Score score_6 = new Score(0.5, Date.from(Instant.now()), p3, g2);
@@ -123,9 +123,9 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			Score score_11 = new Score(0.0, Date.from(Instant.now()), p6, g4);
 
 			Score score_12 = new Score(1.0, Date.from(Instant.now()), p1, g5);
-			Score score_13 = new Score(0.0, Date.from(Instant.now()), p6, g5);*/
+			Score score_13 = new Score(0.0, Date.from(Instant.now()), p6, g5);*//*
 
-			/*scoreRepository.save(score_4);
+			*//*scoreRepository.save(score_4);
 			scoreRepository.save(score_5);
 			scoreRepository.save(score_6);
 			scoreRepository.save(score_7);
@@ -134,7 +134,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			scoreRepository.save(score_10);
 			scoreRepository.save(score_11);
 			scoreRepository.save(score_12);
-			scoreRepository.save(score_13);*/
+			scoreRepository.save(score_13);*//*
 
 			Ship ship1 = new Ship("carrier", List.of("A1", "A2", "A3", "A4", "A5"), gamePlayer1);
 			Ship ship2 = new Ship("battleship", List.of("E1", "E2", "E3", "E4"), gamePlayer1);
@@ -173,7 +173,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			salvoRepository.save(salvo_3);
 			salvoRepository.save(salvo_4);
 
-			repository.save(p1);
+			repository.save(p1);*/
 
 		};
 	}
@@ -204,19 +204,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 				}
 			});
 		}
-		/*
-	UserDetailsService loadUsername(String userName){
-		UserDetailsService userDetails = new UserDetailsService() {
-			@Override
-			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				return null;
-			}
-		};
 
-		return userDetails;
-	};
-
-*/
 
 
 	@Configuration
