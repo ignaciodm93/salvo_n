@@ -6,6 +6,11 @@ var submitButton;
 
 updateJson();
 
+setInterval(
+function()
+{
+updateJson();
+}, 4000);
 
 
 $(function() {
@@ -68,6 +73,10 @@ $('#login-form').on('submit', function (event) {
                         $('#loginSuccess').show( "slow" ).delay(2500).hide( "slow" );
                         $("#username").val("");
                         $("#password").val("");
+                        $("#createGameForm").show();
+
+                        //$("#showGamesTable").show();
+
                         updateJson();
                         playLogin();
                     })
