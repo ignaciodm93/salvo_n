@@ -1,9 +1,12 @@
+
 var data;
 var gamesData;
 var playersArray;
 var submitButton;
 
 updateJson();
+
+
 
 $(function() {
     $('.submitbutton').click(function () {
@@ -12,24 +15,31 @@ $(function() {
 
 });
 
+
+backgroundMusicGames();
+
 $('#login-form').on('submit', function (event) {
+
     event.preventDefault();
 
     if (submitButton == "login") {
+
         $.post("/api/login",
             { name: $("#username").val(),
                 pwd: $("#password").val() })
             .done(function() {
+
                 console.log("login ok");
                 $('#loginSuccess').show( "slow" ).delay(2000).hide( "slow" );
                 // $("#username").val("");
                 $("#password").val("");
                 updateJson();
                 $("#createGameForm").show();
-
+                playLogin();
             })
             .fail(function() {
                 console.log("login failed");
+                playFail();
                 $('#loginFailed').show( "slow" ).delay(2000).hide( "slow" );
                 $("#username").val("");
                 $("#password").val("");
@@ -41,11 +51,13 @@ $('#login-form').on('submit', function (event) {
             });
 
     } else if (submitButton == "signup") {
+
         $.post("/api/players",
             { email: $("#username").val(),
                 password: $("#password").val() })
             .done(function(data) {
                 console.log("signup ok");
+
                 console.log(data);
                 $('#signupSuccess').show( "slow" ).delay(2000).hide( "slow" );
                 $.post("/api/login",
@@ -57,10 +69,11 @@ $('#login-form').on('submit', function (event) {
                         $("#username").val("");
                         $("#password").val("");
                         updateJson();
-
+                        playLogin();
                     })
                     .fail(function() {
                         console.log("login failed");
+
                         $('#loginFailed').show( "slow" ).delay(2000).hide( "slow" );
                         $("#username").val("");
                         $("#password").val("");

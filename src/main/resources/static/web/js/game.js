@@ -4,6 +4,11 @@ developed by Berenguer Pou / Ubiqum Barcelona (berenguer@ubiqum.com)
 Last update: June, 11, 2018
 */
 
+//h
+//$(document).ready( function () {
+//  backgroundMusicGame();
+//});
+
 
 var gamePlayerData = {};
 var errorMsg;
@@ -16,12 +21,15 @@ var waitState = false;
 
 refreshGameView(makeUrl());
 
+backgroundMusicGame();
+
 $('#logoutButton').on('click', function (event) {
     event.preventDefault();
     $.post("/api/logout")
         .done(function () {
             console.log("logout ok");
             $('#logoutSuccess').show("slow").delay(2000).hide("slow");
+
             setTimeout(
                 function()
                 {
@@ -95,12 +103,15 @@ function refreshGameView(_url) {
             }
 
             if (gamePlayerData.gameState === "WON"){
+            //indiana
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
                 $('#battleGrids').show('puff', 'slow');
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("yes you won");
+
+                playWin();
             }
             if (gamePlayerData.gameState === "TIE"){
                 showSelf(gamePlayerData);
@@ -226,6 +237,7 @@ function showSelf (gamePlayerData) {
             if (salvo.player == youID){
                 cellID = "#" + location;
                 $(cellID).addClass("salvoCell");
+
 
         //        console.log("Your salvo on " + location);
                 $(cellID).text(salvo.turn);
@@ -424,8 +436,10 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         let hitsReport = "";
         if (playTurn.damages.carrierHits > 0){
             hitsReport += "Carrier " + addDamagesIcons(playTurn.damages.carrierHits, "hit") + " ";
+
             if (playTurn.damages.carrier === 5){
                 hitsReport += "SUNK! ";
+
                 $(playerTag + 'carrierIcon').html('<img src="img/carriersunk.png">');
                 shipsAfloat--;
             }
@@ -433,14 +447,17 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
 
         if (playTurn.damages.battleshipHits > 0){
             hitsReport += "Battleship " + addDamagesIcons(playTurn.damages.battleshipHits, "hit") + " ";
+
             if (playTurn.damages.battleship === 4){
                 hitsReport += "SUNK! ";
+
                 $(playerTag + 'battleshipIcon').html('<img src="img/battleshipsunk.png">');
                 shipsAfloat--;
             }
         }
         if (playTurn.damages.submarineHits > 0){
             hitsReport += "Submarine " + addDamagesIcons(playTurn.damages.submarineHits, "hit") + " ";
+
             if (playTurn.damages.submarine === 3){
                 hitsReport += "SUNK! ";
                 $(playerTag + 'submarineIcon').html('<img src="img/submarinesunk.png">');
@@ -449,6 +466,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         }
         if (playTurn.damages.destroyerHits > 0){
             hitsReport += "Destroyer " + addDamagesIcons(playTurn.damages.destroyerHits, "hit") + " ";
+
             if (playTurn.damages.destroyer === 3){
                 hitsReport += "SUNK! ";
                 $(playerTag + 'destoyerIcon').html('<img src="img/destoyersunk.png">');
@@ -457,6 +475,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         }
         if (playTurn.damages.patrolboatHits > 0){
             hitsReport += "Patrol Boat " + addDamagesIcons(playTurn.damages.patrolboatHits, "hit") + " ";
+
             if (playTurn.damages.patrolboat === 2){
                 hitsReport += "SUNK! ";
                 $(playerTag + 'patrolboatIcon').html('<img src="img/patrolboatsunk.png">');

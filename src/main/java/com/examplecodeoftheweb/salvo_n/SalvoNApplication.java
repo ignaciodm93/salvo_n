@@ -204,19 +204,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 				}
 			});
 		}
-		/*
-	UserDetailsService loadUsername(String userName){
-		UserDetailsService userDetails = new UserDetailsService() {
-			@Override
-			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				return null;
-			}
-		};
 
-		return userDetails;
-	};
-
-*/
 
 
 	@Configuration
