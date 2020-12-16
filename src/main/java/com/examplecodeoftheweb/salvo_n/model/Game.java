@@ -4,7 +4,7 @@ package com.examplecodeoftheweb.salvo_n.model;
 import javax.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +15,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
-    private LocalDateTime created;
+    private ZonedDateTime created;
 
 
 
@@ -47,12 +47,12 @@ public class Game {
 
 
     //region Constructores
-    public Game(LocalDateTime date) {
+    public Game(ZonedDateTime date) {
         this.created = date;
         gamePlayers = new HashSet<GamePlayer>();
     }
 
-    public Game(LocalDateTime created, Set<GamePlayer> gamePlayers, Set<Score> scores) {
+    public Game(ZonedDateTime created, Set<GamePlayer> gamePlayers, Set<Score> scores) {
         this.created = created;
         this.gamePlayers = gamePlayers;
         this.scores = scores;
@@ -60,7 +60,7 @@ public class Game {
 
     //prueba
     public Game(){
-        created = LocalDateTime.now();
+        created = ZonedDateTime.now();
         this.gamePlayers = new HashSet<>();
     }
     //endregion
@@ -84,16 +84,16 @@ public class Game {
         return id;
     }
 
-    public LocalDateTime getDate() {
+    public ZonedDateTime getDate() {
         return created;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(ZonedDateTime date) {
         this.created = date;
     }
 
 
-    public LocalDateTime getCreated() {
+    public ZonedDateTime getCreated() {
         return created;
     }
 
