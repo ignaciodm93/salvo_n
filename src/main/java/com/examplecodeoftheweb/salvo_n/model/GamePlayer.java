@@ -5,9 +5,9 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.Comparator;
 
 @Entity
 public class GamePlayer {
@@ -33,7 +33,9 @@ public class GamePlayer {
     @JoinColumn(name="game_id")
     private Game game;
 
-
+    public void setShips(Set<Ship> ships) {
+        this.ships = ships;
+    }
 
     //prueba lean
     @OneToMany(mappedBy = "gamePlayer", fetch=FetchType.EAGER)
@@ -55,14 +57,26 @@ public class GamePlayer {
 
     //ensayo para conexion con Salvos. Si pincha, borrar. Funciona, guarda con las mayusculas.
     @OneToMany(mappedBy = "gamePlayer", fetch = FetchType.EAGER)
+    @OrderBy
     private Set<Salvo> salvos  = new HashSet<Salvo>();
 
 
     //region Mathods
-    public void addShips(Ship newShip){
+    public void addShip(Ship newShip){
         this.ships.add(newShip);
         newShip.setGamePlayer(this);
     }
+
+    public void addShips(List<Ship> ships){
+        ships = ships;
+    }
+
+
+    public void addSalvos(List<Salvo> salvos){
+        salvos = salvos;
+    }
+
+
 
     //Prueba
     public void addSalvo(Salvo newSalvo){
@@ -83,7 +97,8 @@ public class GamePlayer {
 
 
     public GamePlayer(){
-
+         Set<Ship> ships = new HashSet<Ship>();
+        Set<Salvo> salvos  = new HashSet<Salvo>();
     }
     //endregion
 
@@ -138,7 +153,49 @@ public class GamePlayer {
     }
 
 
+    public static Optional<GamePlayer> getOpponent(GamePlayer gamePlayer){
+        GamePlayer opponent = gamePlayer.getGame().getGamePlayers().stream()
+                .filter(gp -> gp.getId() != gamePlayer.getId()).findFirst().get();
+        return Optional.of(opponent);
+    }
+
+
+
     //endregion
+
+
+    public long getLastTurn(GamePlayer gamePlayer){
+
+        //long turn = gamePlayer.getSalvos().stream().max(Long:: compare).get();
+
+        long turn = gamePlayer.getSalvos().stream().map(s -> s.getTurn()).max(Long:: compare).get();
+
+
+        return turn;
+
+    }
+
+
+    public static long CurrentTurn(GamePlayer gp){
+
+        List<Long> turnsList = gp.getSalvos().stream().map(s -> s.getTurn()).collect(Collectors.toList());
+
+        long lastTurn = Collections.max(turnsList);
+
+        return lastTurn;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

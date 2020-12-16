@@ -13,7 +13,7 @@ public class ScoreDTO {
 
         dto.put("player", s.getPlayer().getId());
         dto.put("score", s.getScore());
-        dto.put("finishDate", s.getFinishDate().getTime());
+        dto.put("finishDate", s.getFinishDate());
 
         return dto;
     }

@@ -61,6 +61,7 @@ public class Game {
     //prueba
     public Game(){
         created = LocalDateTime.now();
+        this.gamePlayers = new HashSet<>();
     }
     //endregion
 
@@ -70,6 +71,9 @@ public class Game {
     }
 */
 
+    public void setScores(Set<Score> scores) {
+        this.scores = scores;
+    }
 
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;

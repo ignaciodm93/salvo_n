@@ -3,6 +3,7 @@ package com.examplecodeoftheweb.salvo_n;
 
 import com.examplecodeoftheweb.salvo_n.model.*;
 import com.examplecodeoftheweb.salvo_n.repository.*;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -43,7 +44,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 	}
 
-
+	//Para encriptar las contraseñas antes de guardarlas
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -109,8 +110,8 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			GPrepository.save(gamePlayer9);
 			GPrepository.save(gamePlayer10);
 
-			Score score_4 = new Score(1.0, Date.from(Instant.now()), p1, g1);
-			Score score_5 = new Score(0.0, Date.from(Instant.now()), p2, g1);
+			/*Score score_4 = new Score(1.0, LocalDateTime.now(), p1, g1);
+			Score score_5 = new Score(0.0, LocalDateTime.now(), p2, g1);
 
 			Score score_6 = new Score(0.5, Date.from(Instant.now()), p3, g2);
 			Score score_7 = new Score(0.5, Date.from(Instant.now()), p4, g2);
@@ -122,9 +123,9 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			Score score_11 = new Score(0.0, Date.from(Instant.now()), p6, g4);
 
 			Score score_12 = new Score(1.0, Date.from(Instant.now()), p1, g5);
-			Score score_13 = new Score(0.0, Date.from(Instant.now()), p6, g5);
+			Score score_13 = new Score(0.0, Date.from(Instant.now()), p6, g5);*/
 
-			scoreRepository.save(score_4);
+			/*scoreRepository.save(score_4);
 			scoreRepository.save(score_5);
 			scoreRepository.save(score_6);
 			scoreRepository.save(score_7);
@@ -133,19 +134,19 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			scoreRepository.save(score_10);
 			scoreRepository.save(score_11);
 			scoreRepository.save(score_12);
-			scoreRepository.save(score_13);
+			scoreRepository.save(score_13);*/
 
-			Ship ship1 = new Ship("Carrier", List.of("A1", "A2", "A3", "A4", "A5"), gamePlayer1);
-			Ship ship2 = new Ship("BattleShip", List.of("E1", "E2", "E3", "E4"), gamePlayer1);
-			Ship ship3 = new Ship("Submarine", List.of("C1", "C2", "C3"), gamePlayer1);
-			Ship ship4 = new Ship("Destroyer", List.of("A7", "B7", "C7"), gamePlayer1);
-			Ship ship5 = new Ship("Patrol Boat", List.of("F1", "F2"), gamePlayer1);
+			Ship ship1 = new Ship("carrier", List.of("A1", "A2", "A3", "A4", "A5"), gamePlayer1);
+			Ship ship2 = new Ship("battleship", List.of("E1", "E2", "E3", "E4"), gamePlayer1);
+			Ship ship3 = new Ship("submarine", List.of("C1", "C2", "C3"), gamePlayer1);
+			Ship ship4 = new Ship("destroyer", List.of("A7", "B7", "C7"), gamePlayer1);
+			Ship ship5 = new Ship("patrolboat", List.of("F1", "F2"), gamePlayer1);
 
-			Ship ship6 = new Ship("Carrier", List.of("A1", "B1", "C1", "D1", "E1"), gamePlayer2);
-			Ship ship7 = new Ship("BattleShip", List.of("B6", "B3", "B4", "B5"), gamePlayer2);
-			Ship ship8 = new Ship("Submarine", List.of("H3", "H4", "H5"), gamePlayer2);
-			Ship ship9 = new Ship("Destroyer", List.of("D7", "E7", "F7"), gamePlayer2);
-			Ship ship10 = new Ship("Patrol Boat", List.of("J9", "J10"), gamePlayer2);
+			Ship ship6 = new Ship("carrier", List.of("A1", "B1", "C1", "D1", "E1"), gamePlayer2);
+			Ship ship7 = new Ship("battleship", List.of("B3", "B4", "B5", "B6"), gamePlayer2);
+			Ship ship8 = new Ship("submarine", List.of("H3", "H4", "H5"), gamePlayer2);
+			Ship ship9 = new Ship("destroyer", List.of("D7", "E7", "F7"), gamePlayer2);
+			Ship ship10 = new Ship("patrolboat", List.of("J9", "J10"), gamePlayer2);
 
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
@@ -162,10 +163,10 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 			//Salvoes
 			//prueba, creo que no se deberia hacer asi
-			Salvo salvo_1 = new Salvo(1, List.of("A3","B3","C3"), gamePlayer1);
-			Salvo salvo_2 = new Salvo(1, List.of("F1","D7","B9"), gamePlayer2);
-			Salvo salvo_3 = new Salvo(1, List.of("B5", "B6", "B7"), gamePlayer3);
-			Salvo salvo_4 = new Salvo(1, List.of("A5", "B9", "E3"), gamePlayer4);
+			Salvo salvo_1 = new Salvo(1, List.of("A1", "B1", "C1", "D1", "E1"), gamePlayer1);
+			Salvo salvo_2 = new Salvo(2, List.of("B3", "B4", "B5", "B6", "G10"), gamePlayer1);
+			Salvo salvo_3 = new Salvo(3, List.of("H3", "H4", "H5", "B8", "B9"), gamePlayer1);
+			Salvo salvo_4 = new Salvo(4, List.of("D7", "E7", "F7", "J9", "C5"), gamePlayer1);
 
 			salvoRepository.save(salvo_1);
 			salvoRepository.save(salvo_2);
@@ -174,20 +175,23 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 
 			repository.save(p1);
 
-
 		};
 	}
 
-
 }
 
-
+	//Con esto setteamos a la base de datos como fuente para la autenticacion
 	@Configuration
 	class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
 		@Autowired
 		PlayerRepository playerRepository;
 
+		//Toma un parametro pasado por el front y lo chequea con la base de datos usando
+			//el metodo declarado en el repositorio de player:
+		//Si lo encuentra crea y retorna un objeto org.springframework.security.core.userdetails.User,
+			//suministrando asi los nombres, contraseñas y roles que dicho usuario posee.
+		//El encargado de chequear la contraseña es Spring, que lo ahce de forma interna.
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
 			auth.userDetailsService(inputName-> {
@@ -227,6 +231,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 					.antMatchers("/h2-console/**").permitAll()
 					.antMatchers("/api/games").permitAll();
 
+
 			http.formLogin()
 					.usernameParameter("name")
 					.passwordParameter("pwd")
@@ -252,6 +257,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
 		}
 
+		//defined to remove the flag Spring sets when an unauthenticated user attempts to access some resource.
 		private void clearAuthenticationAttributes(HttpServletRequest request) {
 			HttpSession session = request.getSession(false);
 			if (session != null) {
@@ -259,6 +265,7 @@ public class SalvoNApplication extends SpringBootServletInitializer {
 			}
 		}
 	}
+
 
 
 }

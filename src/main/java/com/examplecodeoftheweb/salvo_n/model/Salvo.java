@@ -13,7 +13,7 @@ public class Salvo {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
-    private int turn;
+    private long turn;
 
     @ElementCollection
     @Column(name = "locations")
@@ -35,7 +35,7 @@ public class Salvo {
     }
 
     //region Setters
-    public void setTurn(int turn) {
+    public void setTurn(long turn) {
         this.turn = turn;
     }
 
@@ -53,10 +53,15 @@ public class Salvo {
         return id;
     }
 
-    public int getTurn() {
+    public long getTurn() {
         return turn;
     }
 
+
+    public Salvo saveSalvo(GamePlayer gamePlayer){
+        this.gamePlayer = gamePlayer;
+        return this;
+    }
 
 
     public List<String> getLocations() {
@@ -67,4 +72,11 @@ public class Salvo {
         return gamePlayer;
     }
     //endregion
+
+    //Sin usar, es muy similar al setTurn
+    public void addTurn(long add){
+        this.turn += add;
+    }
+
+
 }

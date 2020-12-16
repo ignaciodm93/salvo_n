@@ -77,5 +77,12 @@ public class Ship {
     public void setGamePlayer(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;
     }
+
+    public Ship saveShip(GamePlayer gamePlayer){
+        this.gamePlayer = gamePlayer;
+        return this;
+    }
+
+
     //endregion
 }

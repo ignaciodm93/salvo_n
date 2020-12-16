@@ -4,7 +4,7 @@ package com.examplecodeoftheweb.salvo_n.model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 public class Score {
@@ -14,7 +14,7 @@ public class Score {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
     private double score;
-    private Date finishDate;
+    private LocalDateTime finishDate;
 
     //region Relaciones
     @ManyToOne(fetch = FetchType.EAGER)
@@ -31,7 +31,7 @@ public class Score {
 
     }
 
-    public Score(double score, Date finishDate, Player player, Game game) {
+    public Score(double score, LocalDateTime finishDate, Player player, Game game) {
         this.score = score;
         this.finishDate = finishDate;
         this.player = player;
@@ -44,15 +44,15 @@ public class Score {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(double score) {
         this.score = score;
     }
 
-    public Date getFinishDate() {
+    public LocalDateTime getFinishDate() {
         return finishDate;
     }
 
-    public void setFinishDate(Date finishDate) {
+    public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
     }
 
